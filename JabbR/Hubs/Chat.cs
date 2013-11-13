@@ -141,12 +141,13 @@ namespace JabbR
             LogOn(user, Context.ConnectionId, reconnecting);
         }
 
-        public bool Send(string content, string roomName)
+        public bool Send(string content, string roomName, bool isHtml = false)
         {
             var message = new ClientMessage
             {
                 Content = content,
-                Room = roomName
+                Room = roomName,
+                IsHtml = isHtml
             };
 
             return Send(message);
@@ -189,7 +190,17 @@ namespace JabbR
 
             // Create a true unique id and save the message to the db
             string id = Guid.NewGuid().ToString("d");
-            ChatMessage chatMessage = _service.AddMessage(user, room, id, clientMessage.Content);
+
+            ChatMessage chatMessage; 
+            if (clientMessage.IsHtml)
+            {
+                chatMessage = _service.AddHtmlMessage(user, room, id, clientMessage.Content);
+            }
+            else
+            {
+                chatMessage = _service.AddMessage(user, room, id, clientMessage.Content);
+            }
+            
             _repository.CommitChanges();
 
 
@@ -1133,6 +1144,11 @@ namespace JabbR
             Clients.All.forceUpdate();
         }
 
+        void INotificationService.DisplayHtml(ChatUser user, ChatRoom room, string html)
+        {
+            Send(html, room.Name, true);
+        }
+
         private void OnRoomChanged(ChatRoom room)
         {
             var roomViewModel = new RoomViewModel
@@ -1200,6 +1216,8 @@ namespace JabbR
 
             Clients.User(targetUser.Id).logOut(rooms);
         }
+
+
 
         protected override void Dispose(bool disposing)
         {

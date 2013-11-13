@@ -56,5 +56,7 @@ namespace JabbR.Services
         void RemoveAdmin(ChatUser targetUser);
         void BroadcastMessage(ChatUser user, string messageText);
         void ForceUpdate();
+
+        void DisplayHtml(ChatUser user, ChatRoom room, string html);
     }
 }

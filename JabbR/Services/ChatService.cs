@@ -451,6 +451,26 @@ namespace JabbR.Services
             return chatMessage;
         }
 
+        public ChatMessage AddHtmlMessage(ChatUser user, ChatRoom room, string id, string html)
+        {
+            var chatMessage = new ChatMessage
+            {
+                Id = id,
+                User = user,
+                Content = string.Empty,
+                HtmlContent = html,
+                When = DateTimeOffset.UtcNow,
+                Room = room,
+                HtmlEncoded = true
+            };
+
+            _recentMessageCache.Add(chatMessage);
+
+            _repository.Add(chatMessage);
+
+            return chatMessage;
+        }
+
         public ChatMessage AddMessage(string userId, string roomName, string content)
         {
             ChatUser user = _repository.VerifyUserId(userId);
