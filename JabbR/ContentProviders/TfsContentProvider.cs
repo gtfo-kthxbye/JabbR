@@ -11,7 +11,7 @@
     {
         public override bool IsValidContent(Uri uri)
         {
-            if (uri.Host.Contains("dvc-tfs12") && uri.AbsoluteUri.Contains("_workitems#"))
+            if (uri.Host.ToLower().Contains("dvc-tfs12") && uri.AbsoluteUri.ToLower().Contains("_workitems#"))
             {
                 return true;    
             }
@@ -27,17 +27,29 @@
             }
             
             // _workitems#_a=edit&id=29141
-            if (request.RequestUri.AbsoluteUri.Contains("_workitems#"))
+            if (request.RequestUri.AbsoluteUri.ToLower().Contains("_workitems#"))
             {
                 int id;
                 if (parameters.ContainsKey("id") && int.TryParse(parameters["id"], out id))
                 {
-                    return TaskAsyncHelper.FromResult(
-                        new ContentProviderResult
-                        {
-                            Title = "TFS",
-                            Content = new TfsToHtml().GetTaskHtml(id)
-                        });
+                    try
+                    {
+                        return TaskAsyncHelper.FromResult(
+                            new ContentProviderResult
+                            {
+                                Title = "TFS",
+                                Content = new TfsToHtml().GetWorkItemHtml(id)                                
+                            });
+                    }
+                    catch (Exception ex)
+                    {
+                        return TaskAsyncHelper.FromResult(
+                            new ContentProviderResult
+                            {
+                                Title = "BŁAD",
+                                Content = ex.Message
+                            });
+                    }
                 }
             }
 

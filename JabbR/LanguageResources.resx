@@ -1165,4 +1165,10 @@ Use ? or type /? to display the FAQ and list of commands.</value>
   <data name="SendMessageTooLong" xml:space="preserve">
     <value>You cannot post this message. It is too long.</value>
   </data>
+  <data name="Code_CommandInfo" xml:space="preserve">
+    <value>Wkleja kod z kolorowaniem składni.</value>
+  </data>
+  <data name="Tfs_CommandInfo" xml:space="preserve">
+    <value>Wysyła wiadomości o treści zgłodzenia  na TFS o podanym Id.</value>
+  </data>
 </root>

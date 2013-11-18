@@ -6,7 +6,7 @@ using JabbR.Tfs;
 
 namespace JabbR.Commands
 {
-    [Command("tfs", "Tfs_CommandInfo", "note", "Custom")]
+    [Command("tfs", "Tfs_CommandInfo", "[#workitem_Id]", "user")]
     public class TfsCommand : UserCommand
     {
         public override void Execute(CommandContext context, CallerContext callerContext, ChatUser callingUser, string[] args)
@@ -22,7 +22,7 @@ namespace JabbR.Commands
                     var id = 0;
                     if (int.TryParse(args[0].Replace("#", string.Empty), out id))
                     {
-                        var html = new TfsToHtml().GetTaskHtml(id);
+                        var html = new TfsToHtml().GetWorkItemHtml(id);
                         context.NotificationService.DisplayHtml(callingUser, room, html);
                     }                    
                 }
